@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jumpCube3D</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.js"></script>
+    <style>
+        #blocker {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url("images/bg.jpg");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+
+
+        }
+
+        #instructions {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.3);
+
+            display: -webkit-box;
+            display: -moz-box;
+            display: box;
+
+            -webkit-box-orient: horizontal;
+            -moz-box-orient: horizontal;
+            box-orient: horizontal;
+
+            -webkit-box-pack: center;
+            -moz-box-pack: center;
+            box-pack: center;
+
+            -webkit-box-align: center;
+            -moz-box-align: center;
+            box-align: center;
+
+            color: #ffffff;
+            text-align: center;
+            font-family: Arial;
+            font-size: 14px;
+            line-height: 24px;
+
+            /*cursor: pointer;*/
+        }
+    </style>
+</head>
+<body style="overflow:hidden">
+<div id="blocker">
+
+    <div id="instructions">
+
+
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <h3 class="text-center">
+                        <span style="font-size:36px">登录</span><br />
+                    </h3>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="row clearfix">
+                        <div class="col-md-4 column">
+                        </div>
+                        <div class="col-md-4 column">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label for="inputUser3" class="col-sm-3 control-label">用户名</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="inputUser3" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword3" class="col-sm-3 control-label">密码</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control" id="inputPassword3" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <button type="button" class="btn btn-danger" onclick="login()" style="width:100%;">登录</button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                        <div class="col-md-4 column">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function login(){
+        var userName = $('#inputUser3').val();
+        var userPass = $('#inputPassword3').val();
+
+        if(!userName || !userPass){
+            alert("请输入用户名密码");
+        }else{
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                async:false,
+                url: "users/login",
+                data:{userName:userName,userPass:userPass},
+                success: function (result) {
+                    var ret = {};
+                    if(typeof result == 'string'){
+                        ret = JSON.parse(result);
+                    }else{
+                        ret = result;
+                    }
+                    if(ret.code === 0){
+                        window.open("/","_parent");
+                    }else{
+                        alert("登录失败，用户名或密码不正确")
+                    }
+                },
+                error: function (err) {
+                    alert("登录失败")
+                }
+            });
+        }
+
+    }
+
+</script>
+</body>
+</html>
