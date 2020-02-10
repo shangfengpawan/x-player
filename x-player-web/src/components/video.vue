@@ -20,18 +20,26 @@
         <mu-row>
             <mu-col span="12">
                 <mu-list>
-                    <div v-for="item,index in source.detail.dd">
-                        <mu-list-item>
-                            <mu-list-item-title>{{item.name}}[{{item.type}}]</mu-list-item-title>
-                            <mu-list-item-action v-show="item.url != playEpisode.url">
-                                <i class="material-icons icon-play-circle " @click="changeEpisode(index)"></i>
-                            </mu-list-item-action>
-                            <mu-list-item-action v-show="item.url == playEpisode.url">
-                                <p style="color:deeppink">播放中</p>
-                            </mu-list-item-action>
-                        </mu-list-item>
+                    <mu-row :key=index v-for="item,index in source.detail.dd">
+                            <div style="width:calc(100% - 100px);overflow:hidden">
+                                <p>
+                                    {{item.name}}[{{item.type}}]
+                                </p>
+
+                            </div>
+                            <div v-show="item.url != playEpisode.url" style="width:90px;text-align:right;">
+                                <div>
+                                    <i class="material-icons icon-play-circle " @click="changeEpisode(index)"></i>
+                                </div>
+                            </div>
+                            <div v-show="item.url == playEpisode.url" style="width:90px;text-align:right;">
+                                <div>
+                                    <p style="color:deeppink">播放中</p>
+                                </div>
+
+                            </div>
                         <mu-divider></mu-divider>
-                    </div>
+                    </mu-row>
 
                 </mu-list>
             </mu-col>
@@ -99,7 +107,7 @@
             },
             errorHandler(event, data) {
                 if (data.details && data.details === 'manifestLoadError') {
-                    this.$alert("出错了", 'Alert')
+                    this.$alert("出错了:"+data, 'Alert')
                 }
             },
             endHandler(event){

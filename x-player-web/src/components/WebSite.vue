@@ -167,11 +167,12 @@
                             this.$alert(res.data.msg, 'Alert')
                         }
                         this.scrollToTop();
-                        this.$nextTick(() => {
-                            this.loading = false;
-                        })
+
                     })
                 }catch(err){
+                    this.$nextTick(() => {
+                        this.loading = false;
+                    })
                     this.$alert("获取失败", 'Alert')
                 }
 
@@ -211,9 +212,7 @@
 
                 }
                 if(idList.length >0){
-                    this.$nextTick(() => {
-                        this.loading = true;
-                    })
+
                     apiUtils.getDetail(this.currentUri,{ids:idList.join(',')},(res)=>{
                         if(res.data.code == 0){
                             var videos = res.data.data.rss.list[0].video;
@@ -230,7 +229,7 @@
                                                 }
                                             }
                                         }
-                                        console.log(ddIdx)
+//                                        console.log(ddIdx)
                                         var tmpDetail = {
                                             pic:videos[i].pic[0]==undefined?'':videos[i].pic[0],
                                             dd:this.getDD(videos[i].dl[0].dd[ddIdx]._),
@@ -248,6 +247,10 @@
                         this.$nextTick(() => {
                             this.loading = false;
                         })
+                    })
+                }else{
+                    this.$nextTick(() => {
+                        this.loading = false;
                     })
                 }
 
@@ -307,6 +310,7 @@
                 this.getList();
             },
             searchClick(){
+                this.page = 1;
                 this.getList();
             },
             playVideoClick(idx){

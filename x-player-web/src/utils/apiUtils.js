@@ -2,8 +2,8 @@
  * Created by lenovo on 2020/2/6.
  */
 import axios from 'axios';
-var serverPath = "http://localhost:8081";
-//var serverPath = "http://tellstorys.cn:8081";
+//var serverPath = "http://localhost:8081";
+var serverPath = "http://tellstorys.cn:8081";
 
 var getList = function (api, query,callBack) {
     const defaultParams = {
