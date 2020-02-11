@@ -124,8 +124,8 @@
             onWindowResize(){
 
                 var newHeight = window.innerWidth * 9 / 21;
-                if(newHeight<200){
-                    newHeight = 200;
+                if(newHeight<300){
+                    newHeight = 300;
                 }
                 this.$nextTick(() =>{
                     this.styleObj.height = newHeight + 'px';

@@ -12,7 +12,7 @@
                     </mu-select>
 
                     <div  v-show="showSearch" style="font-size:14px;">
-                        <input v-model="keyWord" @keyup.enter="searchClick" style="height:35px;width:200px;;background-color: hsla(0,0%,100%,.15);border:none;color:#fff;"/>
+                        <input v-model="keyWord" @keyup.enter="searchClick" style="height:35px;width:200px;background-color: hsla(0,0%,100%,.15);border:none;color:#fff;"/>
                         <mu-button icon @click="searchClick()" style="height:56px;">
                             <i class="material-icons icon-search" style="user-select: none;font-size:20px !important;"></i>
                         </mu-button>
@@ -46,7 +46,7 @@
                         <span slot="title" style="font-size:14px;">{{vd.name}}</span>
                         <span slot="subTitle" style="font-size:8px;">{{filterSubTitle(vd.last,vd.type)}}</b></span>
                         <mu-button slot="action" icon @click="playVideoClick(index)">
-                            <i class="material-icons icon-play-circle" style="user-select: none;font-size:24px;"></i>
+                            <i class="material-icons icon-play-circle" style="user-select: none;font-size:24px;color: #2196f3;"></i>
                         </mu-button>
                     </mu-grid-tile>
                 </mu-grid-list>
@@ -62,7 +62,7 @@
         <mu-row v-if="isPlay" style="z-index:999;width:100%;height:100%;background-color: #fff;">
             <mu-col span="12">
                 <mu-row>
-                    <mu-col span="12">
+                    <mu-col span="12" style="text-align:right;">
                         <mu-button slot="action" icon @click="playVideoBack()">
                             <i class="material-icons icon-rollback" style="user-select: none;font-size:24px;"></i>
                         </mu-button>
@@ -138,7 +138,7 @@
                     this.currentSite = this.siteList[0];
                     //加载内容内容
                     this.getList();
-                    this.loading = false;
+//                    this.loading = false;
                 })
 
             },
@@ -151,9 +151,8 @@
                     params.t = this.currentClass;
                 }
 
-                this.$nextTick(() => {
-                    this.loading = true;
-                })
+
+                this.loading = true;
                 try{
                     apiUtils.getList(this.currentUri,params,  (res) => {
                         if(res.data.code == 0){
@@ -307,7 +306,9 @@
                 this.leftBar.open = false;
             },
             changePage(){
-                this.getList();
+                this.$nextTick(() => {
+                    this.getList();
+                })
             },
             searchClick(){
                 this.page = 1;
