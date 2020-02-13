@@ -167,5 +167,13 @@
     "httpApi": "http://bttcj.com/inc/sapi.php",
     "httpsApi": "http://bttcj.com/inc/sapi.php",
     "type": "伦理三级"
+  },
+  {
+    "id": "my-list",
+    "name": "我的收藏",
+    "uri": "",
+    "httpApi": "",
+    "httpsApi": "",
+    "type": ""
   }
 ]

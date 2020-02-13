@@ -55,14 +55,19 @@
         <mu-row v-show="!isPlay" style="margin-top:10px;margin-bottom:10px;">
             <mu-col span="12">
                 <mu-flex justify-content="center">
-                    <mu-pagination :total="recordCnt" :current.sync="page" page-size.number="30" page-count.number="5" @change="changePage()"></mu-pagination>
+                    <mu-pagination :total="recordCnt" :current.sync="page" :page-size.number="pageSize" page-count.number="5" @change="changePage()"></mu-pagination>
                 </mu-flex>
             </mu-col>
         </mu-row>
         <mu-row v-if="isPlay" style="z-index:999;width:100%;height:100%;background-color: #fff;">
             <mu-col span="12">
                 <mu-row>
-                    <mu-col span="12" style="text-align:right;">
+                    <mu-col span="6" style="text-align:left;">
+                        <mu-button slot="action" icon @click="addToMyList()">
+                            <i class="material-icons icon-plus" style="user-select: none;font-size:24px;"></i>
+                        </mu-button>
+                    </mu-col>
+                    <mu-col span="6" style="text-align:right;">
                         <mu-button slot="action" icon @click="playVideoBack()">
                             <i class="material-icons icon-rollback" style="user-select: none;font-size:24px;"></i>
                         </mu-button>
@@ -116,12 +121,14 @@
                 page:1,
                 pageCnt:0,
                 recordCnt:0,
+                pageSize:30,
                 leftBar:{
                     docked: false,
                     open: false,
                     position: 'left'
                 },
                 loading:true,
+                timer: '',
                 msg: '这个是Home模板页'
             }
         },
@@ -144,6 +151,7 @@
             },
             getList(){
                 var params = {pg:this.page};
+                this.pageSize = 30;
                 if(this.keyWord != ''){
                     params.wd = this.keyWord;
                 }
@@ -160,9 +168,15 @@
                                 this.parseSiteJson(res.data.data);
                             }
                             catch(err){
+                                this.$nextTick(() => {
+                                    this.loading = false;
+                                })
                                 this.$alert("解析出错", 'Alert')
                             }
                         }else{
+                            this.$nextTick(() => {
+                                this.loading = false;
+                            })
                             this.$alert(res.data.msg, 'Alert')
                         }
                         this.scrollToTop();
@@ -240,6 +254,9 @@
                                 }
                             }
                         }else{
+                            this.$nextTick(() => {
+                                this.loading = false;
+                            })
                             this.$alert(res.data.msg, 'Alert')
                         }
 
@@ -254,6 +271,49 @@
                 }
 
 
+            },
+            getMyList(){
+                this.classList = [];
+                this.loading = true;
+                var params = {pg:this.page};
+                this.pageSize = 10000;
+                if(this.keyWord != ''){
+                    params.wd = this.keyWord;
+                }
+                try{
+                    apiUtils.getReq("getMyList",params,  (res) => {
+                        if(res.data.code == 0){
+                            this.videoList = [];
+                            if(typeof res.data.data == 'string'){
+                                this.videoList = JSON.parse(res.data.data);
+                            }else{
+                                this.videoList = res.data.data;
+                            }
+                            this.recordCnt = this.videoList.length;
+                        }else{
+                            this.$nextTick(() => {
+                                this.loading = false;
+                            })
+                            this.$alert(res.data.msg, 'Alert')
+                        }
+                        this.scrollToTop();
+                        this.$nextTick(() => {
+                            this.loading = false;
+                        })
+
+                    })
+                }catch(err){
+                    this.$nextTick(() => {
+                        this.loading = false;
+                    })
+                    this.$alert("获取失败", 'Alert')
+                }
+
+            },
+            keepAlive(){
+                apiUtils.getReq('ping',null,(res)=>{
+
+                })
             },
             getDD(ddStr){
                 var ret = [];
@@ -296,7 +356,12 @@
                 this.keyWord = '';
                 this.currentClass = 'all'
                 this.currentSite = this.siteList[id];
-                this.getList();
+                if(this.currentSite.id == 'my-list'){
+                    this.getMyList();
+                }else{
+                    this.getList();
+                }
+
             },
             changeClass(id){
                 this.page = 1;
@@ -327,6 +392,21 @@
                 })
 
 
+            },
+            addToMyList(){
+                var tmpVideo ={
+                    sitId:this.currentSite.id,
+                    detail:this.playVideo.detail
+                }
+                var newVideo = Object.assign(tmpVideo, this.playVideo);
+
+                apiUtils.postReq("addMyList",{newVideo:JSON.stringify(newVideo)}, (res)=> {
+                    if(res.data.code == 0){
+                        this.$alert("收藏成功", 'Alert')
+                    }else{
+                        this.$alert("收藏失败", 'Alert')
+                    }
+                })
             }
         },
         computed:{
@@ -336,7 +416,11 @@
         },
         mounted(){
             this.getSiteList();
+            this.timer = setInterval(this.keepAlive, 60000);
 
+        },
+        beforeDestroy() {
+            clearInterval(this.timer);
         }
 
     }

@@ -50,8 +50,16 @@ var getReq = function (api, query, callBack) {
     })
 }
 
+var postReq = function (api, params, callBack) {
+    var tmpUrl = serverPath + "/"+api;
+    axios.post(tmpUrl, params).then((res)=>{
+        callBack(res);
+    })
+}
+
 export default {
     getList:getList,
     getDetail:getDetail,
-    getReq
+    getReq,
+    postReq
 }
