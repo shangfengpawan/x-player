@@ -59,32 +59,32 @@
                 </mu-flex>
             </mu-col>
         </mu-row>
-        <mu-row v-if="isPlay" style="z-index:999;width:100%;height:100%;background-color: #fff;">
-            <mu-col span="12">
-                <mu-row>
-                    <mu-col span="6" style="text-align:left;" v-show="currentSite.id != 'my-list'">
-                        <mu-button slot="action" icon @click="addToMyList()" >
-                            <i class="material-icons icon-plus" style="user-select: none;font-size:24px;"></i>
-                        </mu-button>
-                    </mu-col>
-                    <mu-col span="6" style="text-align:left;" v-show="currentSite.id == 'my-list'">
-                        <mu-button slot="action" icon @click="delFromMyList()" >
-                            <i class="material-icons icon-close" style="user-select: none;font-size:24px;"></i>
-                        </mu-button>
-                    </mu-col>
-                    <mu-col span="6" style="text-align:right;">
-                        <mu-button slot="action" icon @click="playVideoBack()">
-                            <i class="material-icons icon-rollback" style="user-select: none;font-size:24px;"></i>
-                        </mu-button>
-                    </mu-col>
-                </mu-row>
-                <mu-row>
-                    <mu-col span="12" style="padding-bottom:10px;">
-                        <videoComp :source="playVideo" :site-id="currentSite.id" :cache="cache"></videoComp>
-                    </mu-col>
-                </mu-row>
-            </mu-col>
-        </mu-row>
+        <!--<mu-row v-if="isPlay" style="z-index:999;width:100%;height:100%;background-color: #fff;">-->
+            <!--<mu-col span="12">-->
+                <!--<mu-row>-->
+                    <!--<mu-col span="6" style="text-align:left;" v-show="currentSite.id != 'my-list'">-->
+                        <!--<mu-button slot="action" icon @click="addToMyList()" >-->
+                            <!--<i class="material-icons icon-plus" style="user-select: none;font-size:24px;"></i>-->
+                        <!--</mu-button>-->
+                    <!--</mu-col>-->
+                    <!--<mu-col span="6" style="text-align:left;" v-show="currentSite.id == 'my-list'">-->
+                        <!--<mu-button slot="action" icon @click="delFromMyList()" >-->
+                            <!--<i class="material-icons icon-close" style="user-select: none;font-size:24px;"></i>-->
+                        <!--</mu-button>-->
+                    <!--</mu-col>-->
+                    <!--<mu-col span="6" style="text-align:right;">-->
+                        <!--<mu-button slot="action" icon @click="playVideoBack()">-->
+                            <!--<i class="material-icons icon-rollback" style="user-select: none;font-size:24px;"></i>-->
+                        <!--</mu-button>-->
+                    <!--</mu-col>-->
+                <!--</mu-row>-->
+                <!--<mu-row>-->
+                    <!--<mu-col span="12" style="padding-bottom:10px;">-->
+                        <!--<videoComp :source="playVideo" :site-id="currentSite.id" :cache="cache"></videoComp>-->
+                    <!--</mu-col>-->
+                <!--</mu-row>-->
+            <!--</mu-col>-->
+        <!--</mu-row>-->
         <div v-loading="loading" v-show="loading" data-mu-loading-overlay-color="rgba(0, 0, 0, .6)" style="position:absolute;width:100%;height:100%;top:60px;"></div>
 
     </div>
@@ -141,17 +141,23 @@
         methods:{
             getSiteList(){
                 this.loading = true;
-                apiUtils.getReq('sit/sit.json',null,(res)=>{
-                    this.siteList = [];
-                    if(typeof res.data == 'string'){
-                        this.siteList = JSON.parse(res.data);
-                    }else{
-                        this.siteList = res.data;
-                    }
-                    this.currentSite = this.siteList[0];
-                    //加载内容内容
-                    this.getList();
+                apiUtils.getReq('getSiteList',null,(res)=>{
+                    if(res.data.code == 0){
+                        this.siteList = [];
+                        if(typeof res.data.data == 'string'){
+                            this.siteList = JSON.parse(res.data.data);
+                        }else{
+                            this.siteList = res.data.data;
+                        }
+//                        console.log(this.siteList);
+                        this.currentSite = this.siteList[0];
+                        //加载内容内容
+                        this.getList();
 //                    this.loading = false;
+                    }else{
+                        this.$alert(res.data.msg, 'Alert')
+                    }
+
                 })
 
             },
@@ -389,48 +395,13 @@
                 this.playVideo = this.videoList[idx];
                 var scrollT = document.body.scrollTop|| document.documentElement.scrollTop;
                 this.scrollT = scrollT;
-                this.isPlay = true;
+
+                var routeUrl  = this.$router.resolve({path: "/play", query: {sitid: this.currentSite.id,vid:this.playVideo.id,rsitid:this.playVideo.sitId == undefined?'':this.playVideo.sitId}})
+                window.open(routeUrl.href, '_blank');
+//                this.isPlay = true;
             },
-            playVideoBack(){
-                this.isPlay = false;
-                this.$nextTick(() => {
-                    document.body.scrollTop = document.documentElement.scrollTop = this.scrollT;
-                })
 
 
-            },
-            addToMyList(){
-                var tmpVideo ={
-                    sitId:this.currentSite.id,
-                    detail:this.playVideo.detail
-                }
-                var newVideo = Object.assign(tmpVideo, this.playVideo);
-
-                apiUtils.postReq("addMyList",{newVideo:JSON.stringify(newVideo)}, (res)=> {
-                    if(res.data.code == 0){
-                        this.$alert("收藏成功", 'Alert');
-                    }else{
-                        this.$alert("收藏失败", 'Alert')
-                    }
-                })
-            },
-            delFromMyList(){
-                var tmpVideo ={
-                    sitId:this.currentSite.id,
-                    detail:this.playVideo.detail
-                }
-                var newVideo = Object.assign(tmpVideo, this.playVideo);
-
-                apiUtils.postReq("delFromMyList",{newVideo:JSON.stringify(newVideo)}, (res)=> {
-                    if(res.data.code == 0){
-                        this.$alert("取消收藏成功", 'Alert')
-                        this.playVideoBack();
-                        this.getMyList();
-                    }else{
-                        this.$alert("取消收藏失败", 'Alert')
-                    }
-                })
-            }
         },
         computed:{
             currentUri() {

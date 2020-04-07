@@ -134,7 +134,8 @@
                         'quality',
                         'speed',
                         'loop'
-                    ]
+                    ],
+                    muted:true
                 },
                 styleObj:{
                     height:'300px'

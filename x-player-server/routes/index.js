@@ -53,6 +53,21 @@ router.get('/api', function(req, res, next) {
 
 });
 
+router.get('/getSiteList', function (req, res, next) {
+  try{
+    //userName = 'pawan';
+
+    var data = fs.readFileSync(path.join(path.resolve(__dirname,'..'), 'public/sit/sit.json'),'utf-8')
+    if(data==""){
+      data = [];
+    }
+    res.json({code:0,data:data,msg:"success"})
+  }catch (err){
+    console.log(err)
+    res.json({code: -1, data: null, msg: "获取失败"})
+  }
+})
+
 router.get('/ping', function(req, res, next) {
   res.json({code:0,msg:"success"})
 });
