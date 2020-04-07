@@ -14,6 +14,7 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+axios.defaults.withCredentials=true;
 Vue.use(MuseUI);
 Vue.use(Loading);
 Vue.use(Message);

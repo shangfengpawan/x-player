@@ -62,9 +62,14 @@
         <mu-row v-if="isPlay" style="z-index:999;width:100%;height:100%;background-color: #fff;">
             <mu-col span="12">
                 <mu-row>
-                    <mu-col span="6" style="text-align:left;">
-                        <mu-button slot="action" icon @click="addToMyList()">
+                    <mu-col span="6" style="text-align:left;" v-show="currentSite.id != 'my-list'">
+                        <mu-button slot="action" icon @click="addToMyList()" >
                             <i class="material-icons icon-plus" style="user-select: none;font-size:24px;"></i>
+                        </mu-button>
+                    </mu-col>
+                    <mu-col span="6" style="text-align:left;" v-show="currentSite.id == 'my-list'">
+                        <mu-button slot="action" icon @click="delFromMyList()" >
+                            <i class="material-icons icon-close" style="user-select: none;font-size:24px;"></i>
                         </mu-button>
                     </mu-col>
                     <mu-col span="6" style="text-align:right;">
@@ -75,7 +80,7 @@
                 </mu-row>
                 <mu-row>
                     <mu-col span="12" style="padding-bottom:10px;">
-                        <videoComp :source="playVideo"></videoComp>
+                        <videoComp :source="playVideo" :site-id="currentSite.id" :cache="cache"></videoComp>
                     </mu-col>
                 </mu-row>
             </mu-col>
@@ -116,6 +121,7 @@
                 isPlay:false,
                 scrollT:0,
                 playVideo:null,
+                cache:null,
                 keyWord:'',
                 showSearch:false,
                 page:1,
@@ -402,9 +408,26 @@
 
                 apiUtils.postReq("addMyList",{newVideo:JSON.stringify(newVideo)}, (res)=> {
                     if(res.data.code == 0){
-                        this.$alert("收藏成功", 'Alert')
+                        this.$alert("收藏成功", 'Alert');
                     }else{
                         this.$alert("收藏失败", 'Alert')
+                    }
+                })
+            },
+            delFromMyList(){
+                var tmpVideo ={
+                    sitId:this.currentSite.id,
+                    detail:this.playVideo.detail
+                }
+                var newVideo = Object.assign(tmpVideo, this.playVideo);
+
+                apiUtils.postReq("delFromMyList",{newVideo:JSON.stringify(newVideo)}, (res)=> {
+                    if(res.data.code == 0){
+                        this.$alert("取消收藏成功", 'Alert')
+                        this.playVideoBack();
+                        this.getMyList();
+                    }else{
+                        this.$alert("取消收藏失败", 'Alert')
                     }
                 })
             }

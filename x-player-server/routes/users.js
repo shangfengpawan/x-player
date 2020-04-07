@@ -16,7 +16,14 @@ router.post('/login', function(req, res, next) {
     userPass = req.body.userPass
   }
 //console.log(userName,userPass,userConf.user,userConf.password)
-  if(userName === userConf.user && userPass === userConf.password){
+  var isSuccess = false;
+  for(var i=0;i<userConf.length;i++){
+    if(userName === userConf[i].user && userPass === userConf[i].password){
+      isSuccess = true;
+      break;
+    }
+  }
+  if(isSuccess){
     req.session.userName = userName;
     res.json({code:0,msg:'success'})
   }else{

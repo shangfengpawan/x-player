@@ -3,8 +3,8 @@
  */
 import axios from 'axios';
 //var serverPath = "http://localhost:8081";
-var serverPath = "http://tellstorys.cn:8081";
-
+//var serverPath = "http://tellstorys.cn:8081";
+var serverPath = '';
 var getList = function (api, query,callBack) {
     const defaultParams = {
         ac: 'list',
@@ -57,9 +57,14 @@ var postReq = function (api, params, callBack) {
     })
 }
 
+var getServerPath = function () {
+    return serverPath;
+}
+
 export default {
     getList:getList,
     getDetail:getDetail,
     getReq,
-    postReq
+    postReq,
+    getServerPath
 }

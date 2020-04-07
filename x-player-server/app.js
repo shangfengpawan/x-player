@@ -21,12 +21,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-let options = {
-  setHeaders: function (res, path, stat) {
-    res.set('Access-Control-Allow-Origin', '*')
-  }
-}
-app.use(express.static(path.join(__dirname, 'public'),options));
+//let options = {
+//  setHeaders: function (res, path, stat) {
+//    res.set('Access-Control-Allow-Origin', 'http://www.tellstorys.cn:8081')
+//    res.set('Access-Control-Allow-Credentials', 'true')
+//  }
+//}
+//app.use(express.static(path.join(__dirname, 'public'),options));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
   name:'x-player',
@@ -37,14 +40,15 @@ app.use(session({
 }));  //这些是写在app.js里面的
 
 //设置跨域访问
-app.all('*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  //res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-  res.header("X-Powered-By",' 3.2.1')
-  //res.header("Content-Type", "application/json;charset=utf-8");
-  next();
-});
+//app.all('*', function(req, res, next) {
+//  res.header("Access-Control-Allow-Origin", "http://www.tellstorys.cn:8081");
+//  res.header("Access-Control-Allow-Credentials", "true");
+//  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//  //res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+//  res.header("X-Powered-By",' 3.2.1')
+//  //res.header("Content-Type", "application/json;charset=utf-8");
+//  next();
+//});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
