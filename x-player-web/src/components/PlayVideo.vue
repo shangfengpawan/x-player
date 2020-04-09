@@ -8,9 +8,7 @@
                     </mu-button>
                 </mu-col>
                 <mu-col span="6" style="text-align:left;" v-show="currentSite.id == 'my-list'">
-                    <mu-button slot="action" icon @click="delFromMyList()" >
-                        <i class="material-icons icon-close" style="user-select: none;font-size:24px;"></i>
-                    </mu-button>
+                    <a href="#" @click="delFromMyList()">取消收藏</a>
                 </mu-col>
                 <!--<mu-col span="6" style="text-align:right;">-->
                     <!--<mu-button slot="action" icon @click="playVideoBack()">-->
@@ -193,21 +191,29 @@
                 })
             },
             delFromMyList(){
-                var tmpVideo ={
-                    sitId:this.currentSite.id,
-                    detail:this.playVideo.detail
-                }
-                var newVideo = Object.assign(tmpVideo, this.playVideo);
+                this.$confirm('确定要取消收藏？', '提示', {
+                    type: 'warning'
+                }).then(({ result }) => {
+                    if (result) {
+                        //确定
+                        var tmpVideo ={
+                            sitId:this.currentSite.id,
+                            detail:this.playVideo.detail
+                        }
+                        var newVideo = Object.assign(tmpVideo, this.playVideo);
 
-                apiUtils.postReq("delFromMyList",{newVideo:JSON.stringify(newVideo)}, (res)=> {
-                    if(res.data.code == 0){
-                        this.$alert("取消收藏成功", 'Alert')
-                        this.playVideoBack();
-                        this.getMyList();
-                    }else{
-                        this.$alert("取消收藏失败", 'Alert')
+                        apiUtils.postReq("delFromMyList",{newVideo:JSON.stringify(newVideo)}, (res)=> {
+                            if(res.data.code == 0){
+                                this.$alert("取消收藏成功", 'Alert')
+                            }else{
+                                this.$alert("取消收藏失败", 'Alert')
+                            }
+                        })
+                    } else {
+                        //取消
                     }
-                })
+                });
+
             }
 
         },
