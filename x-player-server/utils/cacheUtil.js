@@ -244,7 +244,7 @@ var downloadFile = function (baseUrl, filePath, targetPath,targetFile,callBack) 
 }
 
 var delFile = function (url) {
-    fs.unlinkSync(path.join(path.resolve(__dirname,'..','public/cache/'+url)))
+    fs.unlinkSync(url)
 };
 
 var parseM3u8 = function (baseUrl,targetFile,targetPath) {
