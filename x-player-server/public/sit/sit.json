@@ -81,6 +81,54 @@
     "__index": 1
   },
   {
+    "id": "s_1",
+    "name": "33uu资源站",
+    "uri": "http://www.1156zy.net/",
+    "httpApi": "http://cj.1156zy.com/inc/seacmsapi.php",
+    "httpsApi": "http://cj.1156zy.com/inc/seacmsapi.php",
+    "type": "影视"
+  },
+    {
+    "id": "s_2",
+    "name": "123资源站",
+    "uri": "http://www.123ku.com/",
+    "httpApi": "http://cj.123ku2.com:12315/inc/sea123kum3u8.php",
+    "httpsApi": "http://cj.123ku2.com:12315/inc/sea123kum3u8.php",
+    "type": "影视"
+  },
+  {
+    "id": "s_3",
+    "name": "135资源站",
+    "uri": "http://135zy0.com/",
+    "httpApi": "http://cj.zycjw1.com/inc/135m3u8.php",
+    "httpsApi": "http://cj.zycjw1.com/inc/135m3u8.php",
+    "type": "影视"
+  },
+  {
+    "id": "s_4",
+    "name": "豆瓣资源站",
+    "uri": "http://doubanzy.com/",
+    "httpApi": "http://v.1988cj.com/inc/dbm3u8.php",
+    "httpsApi": "http://v.1988cj.com/inc/dbm3u8.php",
+    "type": "影视"
+  },
+  {
+    "id": "s_5",
+    "name": "酷播资源站",
+    "uri": "http://kubozy.co/",
+    "httpApi": "http://api.kbzyapi.com/inc/ldg_seakakam3u8.php",
+    "httpsApi": "http://api.kbzyapi.com/inc/ldg_seakakam3u8.php",
+    "type": "影视"
+  },
+  {
+    "id": "s_6",
+    "name": "秒播资源站",
+    "uri": "http://mbkkk.com/",
+    "httpApi": "http://caiji.mb77.vip/inc/mbckm3u8.php",
+    "httpsApi": "http://caiji.mb77.vip/inc/mbckm3u8.php",
+    "type": "影视"
+  },
+  {
     "id": "3",
     "name": "800资源站",
     "uri": "http://cj.35zycj.com/",
