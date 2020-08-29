@@ -92,7 +92,7 @@
                                     if(videos[i].dl[0].dd.length>1){
                                         var reg = /m3u8/gi;
                                         for(var k =0 ;k<videos[i].dl[0].dd.length;k++){
-                                            if(reg.test(videos[i].dl[0].dd[k].$.flag)){
+                                            if(reg.test(videos[i].dl[0].dd[k].$.flag) || reg.test(videos[i].dl[0].dd[k]._)){
                                                 ddIdx = k;
                                                 break;
                                             }
